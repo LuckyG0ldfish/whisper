@@ -1,3 +1,11 @@
+
+# install support
+https://github.com/openai/whisper/discussions/1463#discussion-5324136
+https://hub.tcno.co/ai/whisper/install/
+
+whisper.exe demo.mp4 --model medium --language 'Chinese' --output_format txt --task transcribe
+
+
 # Whisper
 
 [[Blog]](https://openai.com/blog/whisper)
@@ -146,4 +154,88 @@ Please use the [🙌 Show and tell](https://github.com/openai/whisper/discussion
 Whisper's code and model weights are released under the MIT License. See [LICENSE](https://github.com/openai/whisper/blob/main/LICENSE) for further details.
 
 
-https://github.com/openai/whisper/discussions/1463#discussion-5324136
+
+
+#offline install discussion: 
+
+Whisper Full (& Offline) Install Process for Windows 10/11
+
+Purpose: These instructions cover the steps not explicitly set out on the main Whisper page, e.g. for those who have never used python code/apps before and do not have the prerequisite software already installed.
+Requirements:
+
+    Full admin rights on your computer.
+    A PC with a CUDA-capable dedicated GPU with at least 4GB of VRAM (but more VRAM is better). See: Available models and languages
+    For online installation: An Internet connection for the initial download and setup.
+    For offline installation: Download on another computer and then install manually using the "OPTIONAL/OFFLINE" instructions below.
+
+Installation
+Step 1: Unlisted Pre-Requisites
+
+    Before you can run whisper you must download and install the follopwing items. (For offline installation just download the files on another machine and move them to your offline machine to install them.)
+        NVIDIA CUDA drivers: https://developer.nvidia.com/cuda-downloads
+        Python 3.9 or 3.10 (x64 version) from https://www.python.org/ (Whisper claims to run with >3.7 but as of 2023-01-18 some dependencies require >3.7 but <3.11).
+        FFMPEG
+            To install via Scoop (https://scoop.sh/), in powershell run
+                Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+                irm get.scoop.sh | iex
+                scoop install ffmpeg
+            OPTIONAL/OFFLINE: Follow instructions here: How to install and use FFMPEG and make sure not to skip the part about adding FFMPEG to the Windows PATH variable.
+        Git for windows from https://gitforwindows.org/
+    Reboot after installing these items.
+
+Step 2B: Whipser Install (Online Install for Online Use)
+
+    Open a command prompt and type this command:
+        pip install git+https://github.com/openai/whisper.git
+    You may now use Whisper online and no further steps are required.
+
+Step 2B: Whipser Install (Online Install for later Offline Use)
+
+    Open a command prompt and type these commands:
+        pip install git+https://github.com/openai/whisper.git
+        pip install blobfile
+    Continue to Step 3: Download Other Required Files
+
+Step 2C: Whipser Install (Offline Install for later Offline Use)
+
+    Option 1: Get the most up to date version of Whisper:
+        Install Python and Git from Step 1 on an second computer you can connect to the internet and reboot to ensure both are working.
+        On the ONLINE machine open a command prompt in any empty folder and type the following commands:
+            pip download git+https://github.com/openai/whisper.git
+            pip download blobfile
+    Option 2: Download all the necessary files from here OPENAI-Whisper-20230314 Offline Install Package
+    Copy the files to your OFFLINE machine and open a command prompt in that folder where you put the files, and run
+        pip install openai-whisper-20230314.zip (note the date may have changed if you used Option 1 above).
+        pip install blobfile-2.0.2-py3-none-any.whl. (note the version may have changed if you used Option 1 above).
+    Continue to Step 3: Download Other Required Files
+
+Step 3: Download Other Required Files (for Offline Use)
+
+    Download Whisper's Language Model files place them in C:\Users[Username]\.cache\whisper Note: If the links are dead updated links can be found at lines 17-27 here: init.py
+        Tiny.En
+        Tiny
+        Base.En
+        Base
+        Small.En
+        Small
+        Medium.En
+        Medium
+        Large-v1
+        Large-v2 (Annoucing the large-v2 model)
+    Download Whisper's vocabulary and encoder files. (Per issue 1399).
+        Download Vocab.bpe
+        Download Encoder.json
+        Install the files to a folder of your choosing, e.g. C:\Users[Username]\.cache\whisper.
+        Update file links in your local copy of openai_public.py which will be installed in your python folder e.g. C:\Users[UserName]\AppData\Local\Programs\Python\Python310-32\Lib\site-packagespython3.9/site-packages/tiktoken_ext/openai_public.py to point to where you downloaded the files.
+            Remove the URL "https://openaipublic.blob.core.windows.net/gpt-2/encodings/main/" and replace it with your local copy, e.g. "C:/Users/[Username]/.cache/whisper/vocab.bpe" and "C:/Users/[Username]/.cache/whisper/encoder.json"
+
+def gpt2():
+    mergeable_ranks = data_gym_to_mergeable_bpe_ranks(
+        vocab_bpe_file="C:/Users/nic/.cache/whisper/vocab.bpe",
+        encoder_json_file="C:/Users/nic/.cache/whisper/encoder.json",
+    )
+
+Alternative Offline Method
+
+See the pre-compiled .exe version of Whisper provided here: Purfview / Whisper Standalone
+
